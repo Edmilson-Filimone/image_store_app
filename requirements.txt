@@ -1,4 +1,4 @@
 streamlit==0.82.0
-pandas
-PIL
-sqlite
+pandas>=1.2.4  
+pillow>=8.20
+sqlite>=3.35.4
