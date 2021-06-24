@@ -3,8 +3,11 @@ import sqlite3
 import pandas as pd
 from PIL import Image
 
+ficheiro = ''
+
 
 def encode_f(filer):
+    global ficheiro
     try:
         with open(file=filer, mode='rb') as file:
             ficheiro = file.read()
