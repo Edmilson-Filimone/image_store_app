@@ -20,7 +20,7 @@ def inserir(nome, titulo, data, ficheiro, imagem_1, imagem_2):
     usuario atraves dos seus parametros"""
 
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('BASE.db')
         cursor = conexao.cursor()
         create = "CREATE TABLE IF NOT EXISTS One " \
                  "(nome text,titulo text," \
@@ -43,7 +43,7 @@ def selet_box():
      uma lista de listas [[],[],...] composta por elementos de cada coluna"""
 
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('BASE.db')
         cursor = conexao.cursor()
         select = "SELECT * FROM One"
         cursor.execute(select)
@@ -71,7 +71,7 @@ documento = ''
 def query(nome, titulo, data):
     try:
         global documento
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('BASE.db')
         cursor = conexao.cursor()
         select = "SELECT ficheiro FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome,titulo, data))
@@ -100,7 +100,7 @@ img_1 = ''
 def query_2(nome, titulo, data):
     global img_1
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_1 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -130,7 +130,7 @@ img_2 = ''
 def query_3(nome, titulo, data):
     global img_2
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_2 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -164,6 +164,7 @@ def jpg():
 
 # Main Window
 st.title("RESULTADOS DA PCR")
+st.write(" ")
 #st.image(image=jpg())
 txt = st.subheader('---------------[ Selecione uma das opcoes no Menu ]------------------')
 
