@@ -10,7 +10,7 @@ def encode_f(filer):
             ficheiro = file.read()
         return ficheiro
     except Exception as error:
-        print(error)
+        print(error.args)
     finally:
         file.close()
 
@@ -49,6 +49,7 @@ def selet_box():
         select = "SELECT * FROM One"
         cursor.execute(select)
         retorno = cursor.fetchall()
+        print(retorno)
         nome_lista = []
         titulo_lista = []
         data_lista = []
@@ -57,7 +58,7 @@ def selet_box():
             nome_lista.append(tupla[0])  # guardando os dados da coluna nome na lista
             titulo_lista.append(tupla[1])  # guardando os dados da coluna titulo na lista
             data_lista.append(tupla[2])  # guardando os dados da coluna data na lista
-            #print(nome_lista, '\n', titulo_lista, '\n', data_lista)
+            print(nome_lista, '\n', titulo_lista, '\n', data_lista)
         select_box_lista = [nome_lista, titulo_lista, data_lista]
         return select_box_lista
     except:
@@ -78,7 +79,7 @@ def query(nome, titulo, data):
         select = "SELECT ficheiro FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome,titulo, data))
         retorno = cursor.fetchall()
-        #print(retorno)
+        print(retorno)
 
         # Para o documento
         for tupla in retorno:
@@ -86,7 +87,7 @@ def query(nome, titulo, data):
 
         with open('page_1.csv', 'wb') as file_1:
             done = file_1.write(documento)
-            #print(f'Documento decode_output: {done}')
+            print(f'Documento decode_output: {done}')
             file_1.close()
 
         df = pd.read_csv('page_1.csv')
@@ -117,7 +118,7 @@ def query_2(nome, titulo, data):
 
         with open('i1.jpg', 'wb') as file_2:
             image_1 = file_2.write(img_1)
-            #print(f'Imagem_1 decode_output: {image_1}')
+            print(f'Imagem_1 decode_output: {image_1}')
             file_2.close()
         pil = Image.open('i1.jpg')
         st.header('Vizualizacao do Gel')
@@ -149,7 +150,7 @@ def query_3(nome, titulo, data):
 
         with open('image_2.jpg', 'wb') as file_3:
             image_2 = file_3.write(img_2)
-            #print(f'Imagem_2 decode_output: {image_2}')
+            print(f'Imagem_2 decode_output: {image_2}')
             file_3.close()
         pil = Image.open('image_2.jpg')
         st.write('')
@@ -209,12 +210,11 @@ if pesquisa:
     sb_titulo = st.sidebar.selectbox('Titulo', selet_box()[1])
     sb_data = st.sidebar.selectbox('Data', selet_box()[2])
     ok_pesquisa = st.sidebar.button('Buscar')
-    txt.text('------------------>[ Modo pesquisa activado...Em breve teras os resultados :) ]<-------------------')
+    txt.text('---------->[ Modo pesquisa activado...Em breve teras os resultados :) ]<----------')
     if ok_pesquisa:
         query(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_2(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_3(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         txt.text('-------- Veja os resultados abaixo, caso nada apareca, entao nao ha nenhuma informacao disponivel --------')
-
 #conda activate I:\Biotech-School\Web_Dev\web\envs\one
 #streamlit run I:\Biotech-School\Web_Dev\Gestor.py
