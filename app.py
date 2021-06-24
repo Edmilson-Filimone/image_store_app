@@ -14,8 +14,8 @@ def encode_f(filer):
         return fiche
     except Exception as error:
         print(error)
-    finally:
-        file.close()
+    #finally:
+        #file.close()
 
 
 def inserir(nome, titulo, data, ficheiro, imagem_1, imagem_2):
@@ -196,12 +196,12 @@ if dados:
     apgar = direita.button('Limpar')
 
     if submeter:
-        doc = encode_f(str(input_doc))
-        pic_1 = encode_f(str(input_pic_1))
-        pic_2 = encode_f(str(input_pic_2))
+        #doc = encode_f(str(input_doc))
+        #pic_1 = encode_f(str(input_pic_1))
+        #pic_2 = encode_f(str(input_pic_2))
 
         inserir(nome=input_nome, titulo=input_titulo, data=input_data,
-                ficheiro=doc, imagem_1=pic_1, imagem_2=pic_2)
+                ficheiro=encode_f(str(input_doc)), imagem_1=encode_f(str(input_pic_1)), imagem_2=encode_f(str(input_pic_2)))
 
     if apgar:
         pass
