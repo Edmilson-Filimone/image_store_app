@@ -13,7 +13,7 @@ def encode_f(filer):
             ficheiro = file.read()
         return ficheiro
     except Exception as error:
-        print(error.args)
+        print(error)
     finally:
         file.close()
 
@@ -23,7 +23,7 @@ def inserir(nome, titulo, data, ficheiro, imagem_1, imagem_2):
     usuario atraves dos seus parametros"""
 
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('D_BASE.db')
         cursor = conexao.cursor()
         create = "CREATE TABLE IF NOT EXISTS One " \
                  "(nome text,titulo text," \
@@ -36,7 +36,7 @@ def inserir(nome, titulo, data, ficheiro, imagem_1, imagem_2):
         conexao.commit()
     except Exception as erro:
         print(erro)
-        print('o bife esta aqui')
+        #print('o bife esta aqui')
     finally:
         conexao.close()
 
@@ -47,12 +47,12 @@ def selet_box():
      uma lista de listas [[],[],...] composta por elementos de cada coluna"""
 
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('D_BASE.db')
         cursor = conexao.cursor()
         select = "SELECT * FROM One"
         cursor.execute(select)
         retorno = cursor.fetchall()
-        print(retorno)
+        #print(retorno)
         nome_lista = []
         titulo_lista = []
         data_lista = []
@@ -77,12 +77,12 @@ documento = ''
 def query(nome, titulo, data):
     try:
         global documento
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('D_BASE.db')
         cursor = conexao.cursor()
         select = "SELECT ficheiro FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome,titulo, data))
         retorno = cursor.fetchall()
-        print(retorno)
+        #print(retorno)
 
         # Para o documento
         for tupla in retorno:
@@ -108,7 +108,7 @@ img_1 = ''
 def query_2(nome, titulo, data):
     global img_1
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('D_BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_1 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -140,7 +140,7 @@ img_2 = ''
 def query_3(nome, titulo, data):
     global img_2
     try:
-        conexao = sqlite3.connect('Documents\BASE.db')
+        conexao = sqlite3.connect('D_BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_2 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -163,14 +163,14 @@ def query_3(nome, titulo, data):
     finally:
         conexao.close()
 
-@st.cache
-def jpg():
-    try:
-        with open('pic.jpg', 'rb') as pic:
-            imagem = pic.read()
-        return imagem
-    except:
-        pass
+#@st.cache
+#def jpg():
+#   try:
+#        with open('pic.jpg', 'rb') as pic:
+#            imagem = pic.read()
+#        return imagem
+#    except:
+#        pass
 
 # Programa
 
