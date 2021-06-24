@@ -3,15 +3,15 @@ import sqlite3
 import pandas as pd
 from PIL import Image
 
-ficheiro = ''
+fiche = ''
 
 
 def encode_f(filer):
-    global ficheiro
+    global fiche
     try:
         with open(file=filer, mode='rb') as file:
-            ficheiro = file.read()
-        return ficheiro
+            fiche = file.read()
+        return fiche
     except Exception as error:
         print(error)
     finally:
@@ -23,7 +23,7 @@ def inserir(nome, titulo, data, ficheiro, imagem_1, imagem_2):
     usuario atraves dos seus parametros"""
 
     try:
-        conexao = sqlite3.connect('D_BASE.db')
+        conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         create = "CREATE TABLE IF NOT EXISTS One " \
                  "(nome text,titulo text," \
@@ -47,7 +47,7 @@ def selet_box():
      uma lista de listas [[],[],...] composta por elementos de cada coluna"""
 
     try:
-        conexao = sqlite3.connect('D_BASE.db')
+        conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         select = "SELECT * FROM One"
         cursor.execute(select)
@@ -61,7 +61,7 @@ def selet_box():
             nome_lista.append(tupla[0])  # guardando os dados da coluna nome na lista
             titulo_lista.append(tupla[1])  # guardando os dados da coluna titulo na lista
             data_lista.append(tupla[2])  # guardando os dados da coluna data na lista
-            print(nome_lista, '\n', titulo_lista, '\n', data_lista)
+            #print(nome_lista, '\n', titulo_lista, '\n', data_lista)
         select_box_lista = [nome_lista, titulo_lista, data_lista]
         return select_box_lista
     except:
@@ -72,12 +72,13 @@ def selet_box():
 
 
 documento = ''
-
+done = ''
+df = ''
 
 def query(nome, titulo, data):
     try:
-        global documento
-        conexao = sqlite3.connect('D_BASE.db')
+        global documento, done, df
+        conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         select = "SELECT ficheiro FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome,titulo, data))
@@ -103,12 +104,13 @@ def query(nome, titulo, data):
 
 
 img_1 = ''
-
+pil = ''
+image_1 = ''
 
 def query_2(nome, titulo, data):
-    global img_1
+    global img_1, image_1, pil
     try:
-        conexao = sqlite3.connect('D_BASE.db')
+        conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_1 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -135,12 +137,12 @@ def query_2(nome, titulo, data):
 
 
 img_2 = ''
-
+image_2 = ''
 
 def query_3(nome, titulo, data):
-    global img_2
+    global img_2, image_2, pil
     try:
-        conexao = sqlite3.connect('D_BASE.db')
+        conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         select = "SELECT imagem_2 FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
         cursor.execute(select, (nome, titulo, data))
@@ -214,10 +216,9 @@ if pesquisa:
     sb_data = st.sidebar.selectbox('Data', selet_box()[2])
     ok_pesquisa = st.sidebar.button('Buscar')
     txt.text('---------->[ Modo pesquisa activado...Em breve teras os resultados :) ]<----------')
+    
     if ok_pesquisa:
         query(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_2(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_3(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         txt.text('-------- Veja os resultados abaixo, caso nada apareca, entao nao ha nenhuma informacao disponivel --------')
-#conda activate I:\Biotech-School\Web_Dev\web\envs\one
-#streamlit run I:\Biotech-School\Web_Dev\Gestor.py
