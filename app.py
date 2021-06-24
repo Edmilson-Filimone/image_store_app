@@ -3,8 +3,6 @@ import sqlite3
 import pandas as pd
 from PIL import Image
 
-fiche = ''
-
 
 def encode_f(filer):
     global fiche
@@ -72,12 +70,11 @@ def selet_box():
 
 
 documento = ''
-done = ''
-df = ''
+
 
 def query(nome, titulo, data):
     try:
-        global documento, done, df
+        global documento
         conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
         select = "SELECT ficheiro FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
@@ -104,11 +101,10 @@ def query(nome, titulo, data):
 
 
 img_1 = ''
-pil = ''
-image_1 = ''
+
 
 def query_2(nome, titulo, data):
-    global img_1, image_1, pil
+    global img_1
     try:
         conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
@@ -137,10 +133,10 @@ def query_2(nome, titulo, data):
 
 
 img_2 = ''
-image_2 = ''
+
 
 def query_3(nome, titulo, data):
-    global img_2, image_2, pil
+    global img_2
     try:
         conexao = sqlite3.connect('Documents\BASE.db')
         cursor = conexao.cursor()
