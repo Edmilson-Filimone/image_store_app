@@ -79,10 +79,10 @@ def query(nome, titulo, data):
         for tupla in retorno:
             documento = tupla[0]
 
-        with open('C:\Users\Public\Documents\page.csv', 'wb') as file_1:
+        with open('C:\\Users\\Public\\Documents\\page.csv', 'wb') as file_1:
             file_1.write(documento)
             file_1.close()
-        df = pd.read_csv('C:\Users\Public\Documents\page.csv')
+        df = pd.read_csv('C:\\Users\\Public\\Documents\\page.csv')
         st.header('Condicoes e componetes da PCR')
         st.dataframe(df)
         conexao.close()
@@ -104,10 +104,10 @@ def query_2(nome, titulo, data):
         for tupla in retorno:
             img_1 = tupla[0]
 
-        with open('C:\Users\Public\Documents\file1.jpg', 'wb') as file_2:
+        with open('C:\\Users\\Public\\Documents\\file1.jpg', 'wb') as file_2:
             file_2.write(img_1)
             file_2.close()
-        pil = Image.open('C:\Users\Public\Documents\file1.jpg')
+        pil = Image.open('C:\\Users\\Public\\Documents\\file1.jpg')
         st.header('Vizualizacao do Gel')
         st.write('')
         st.image(pil)
@@ -129,10 +129,10 @@ def query_3(nome, titulo, data):
         for tupla in retorno:
             img_2 = tupla[0]
 
-        with open('C:\Users\Public\Documents\file2.jpg', 'wb') as file_3:
+        with open('C:\\Users\\Public\\Documents\\file2.jpg', 'wb') as file_3:
             file_3.write(img_2)
             file_3.close()
-        pil = Image.open('C:\Users\Public\Documents\file2.jpg')
+        pil = Image.open('C:\\Users\\Public\\Documents\\file2.jpg')
         st.write('')
         st.image(pil)
     except:
