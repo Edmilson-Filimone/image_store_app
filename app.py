@@ -1,16 +1,14 @@
 import streamlit as st
 import sqlite3
-import os
 import pandas as pd
 from PIL import Image
 
 
-def encode_f(filer):
+def encode_f(file):
     global fiche
     try:
-        with open(file=filer, mode='rb') as file:
-            fiche = file.read()
-            file.close()
+        if file is not None:
+            fiche = file.getvalue()
         return fiche
     except Exception as error:
         print(error)
@@ -55,6 +53,7 @@ def selet_box():
         titulo_lista = []
         data_lista = []
 
+
         for tupla in retorno:
             nome_lista.append(tupla[0])  # guardando os dados da coluna nome na lista
             titulo_lista.append(tupla[1])  # guardando os dados da coluna titulo na lista
@@ -79,15 +78,35 @@ def query(nome, titulo, data):
         for tupla in retorno:
             documento = tupla[0]
 
-        with open('C:\\Users\\Public\\Documents\\page.csv', 'wb') as file_1:
+        with open('page.csv', 'wb') as file_1:
             file_1.write(documento)
             file_1.close()
-        df = pd.read_csv('C:\\Users\\Public\\Documents\\page.csv')
-        st.header('Condicoes e componetes da PCR')
+        df = pd.read_csv('page.csv')
+        st.header('Condições e Componetes da PCR')
         st.dataframe(df)
         conexao.close()
+        return documento
     except:
         pass
+
+
+def non_query(nome, titulo, data):
+    try:
+        global conexao
+        conexao = sqlite3.connect('BASE.db')
+        cursor = conexao.cursor()
+        select = "SELECT * FROM One WHERE nome == (?) AND titulo == (?) AND data = (?)"
+        cursor.execute(select, (nome, titulo, data))
+        retorno = cursor.fetchall()
+        non = []
+        # Para o documento
+        for tupla in retorno:
+            non.append(tupla[3])
+            non.append(tupla[4])
+            non.append(tupla[5])
+            return non
+    except:
+        print('error_no_non_query')
 
 
 def query_2(nome, titulo, data):
@@ -104,11 +123,11 @@ def query_2(nome, titulo, data):
         for tupla in retorno:
             img_1 = tupla[0]
 
-        with open('C:\\Users\\Public\\Documents\\file1.jpg', 'wb') as file_2:
+        with open('file1.jpg', 'wb') as file_2:
             file_2.write(img_1)
             file_2.close()
-        pil = Image.open('C:\\Users\\Public\\Documents\\file1.jpg')
-        st.header('Vizualizacao do Gel')
+        pil = Image.open('file1.jpg')
+        st.header('Imagens do Gel')
         st.write('')
         st.image(pil)
     except:
@@ -129,21 +148,12 @@ def query_3(nome, titulo, data):
         for tupla in retorno:
             img_2 = tupla[0]
 
-        with open('C:\\Users\\Public\\Documents\\file2.jpg', 'wb') as file_3:
+        with open('file2.jpg', 'wb') as file_3:
             file_3.write(img_2)
             file_3.close()
-        pil = Image.open('C:\\Users\\Public\\Documents\\file2.jpg')
+        pil = Image.open('file2.jpg')
         st.write('')
         st.image(pil)
-    except:
-        pass
-
-
-def jpg():
-    try:
-        with open('pic.jpg', 'rb') as pic:
-            imagem = pic.read()
-        return imagem
     except:
         pass
 
@@ -151,28 +161,30 @@ def jpg():
 # Programa
 
 # Main Window
-st.title("RESULTADOS DA PCR")
-# st.image(image=jpg())
-txt = st.subheader('---------------[ Selecione uma das opcoes no Menu ]------------------')
+st.title("GESTOR   DOS   DADOS   DA   PCR")
+txt = st.markdown('**----------------------[ Selecione uma das opções do Menu ]----------------------**')
 
 # Sidebar-dados
+st.sidebar.title('Menu')
 dados = st.sidebar.checkbox('Inserir novos dados')
 
 if dados:
+    txt.markdown('**-------------->[ Modo registrar activado...introduza os dados :) ]<--------------**')
     input_nome = st.sidebar.text_input(label='Nome')
     input_titulo = st.sidebar.text_input(label='Titulo')
     input_data = st.sidebar.date_input(label='Data')
-    input_doc = st.sidebar.text_input('Caminho da documento')
-    input_pic_1 = st.sidebar.text_input('Caminho da imagem 1')
-    input_pic_2 = st.sidebar.text_input('Caminho da imagem 2')
+    input_doc = st.sidebar.file_uploader('Carregar arquivo', 'csv')
+    input_pic_1 = st.sidebar.file_uploader('Carregar imagem 1', 'jpg')
+    input_pic_2 = st.sidebar.file_uploader('Carregar imagem 2', 'jpg')
     esquerda, direita = st.sidebar.beta_columns(2)
-    submeter = esquerda.button('Submeter')
-    apgar = direita.button('Limpar')
+    submeter = esquerda.button('Guardar')
+    apgar = direita.empty()
 
     if submeter:
         inserir(nome=input_nome, titulo=input_titulo, data=input_data,
-                ficheiro=encode_f(str(input_doc)), imagem_1=encode_f(str(input_pic_1)),
-                imagem_2=encode_f(str(input_pic_2)))
+                ficheiro=encode_f(input_doc), imagem_1=encode_f(input_pic_1),
+                imagem_2=encode_f(input_pic_2))
+        st.success('Dados salvos com sucesso')
 
     if apgar:
         pass
@@ -185,13 +197,28 @@ if pesquisa:
     sb_titulo = st.sidebar.selectbox('Titulo', selet_box()[1])
     sb_data = st.sidebar.selectbox('Data', selet_box()[2])
     ok_pesquisa = st.sidebar.button('Buscar')
-    txt.text('---------->[ Modo pesquisa activado...Em breve teras os resultados :) ]<----------')
+    txt.markdown('**-------->[ Modo pesquisa activado...Em breve os seus resultados :) ]<---------**')
     if ok_pesquisa:
         query(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_2(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
         query_3(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data))
-        txt.text(
-            '-------- Veja os resultados abaixo --------')
+        txt.markdown('**------------------------------- Veja os resultados abaixo ---------------------------**')
 
-# conda activate I:\Biotech-School\Web_Dev\web\envs\one
-# streamlit run I:\Biotech-School\Web_Dev\app2.py
+        if non_query(nome=str(sb_nome), titulo=str(sb_titulo), data=str(sb_data)) is None:
+            st.error('Ups! seus dados não foram encontrados, veja se selecionou o nome,'
+                     ' o título e a data exata que usou ao inserir os ficheiros e tente de novo.  ')
+
+#Sidebar_info
+info = st.sidebar.checkbox('Sobre')
+if info:
+    st.sidebar.markdown("""*"Olá, esta é uma web app (amadora),
+desenvolvida de forma a auxiliar
+a comunidade de investigadores 
+no seu dia a dia através de um 
+projecto simples e prático. 
+Obrigado por ler e um até breve :)"*
+                    
+Edmilson Filimone
+philimone99@gmail.com
+
+26 de Junho de 2021""")
